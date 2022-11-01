@@ -7,7 +7,7 @@ import { MessageService } from '../messages/message.service';
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser?: User | undefined;
+  currentUser?: User ;
 
   get isLoggedIn(): boolean {
     return !!this.currentUser;
