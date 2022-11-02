@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -26,7 +27,8 @@ export class ProductListComponent implements OnInit {
   filteredProducts: Product[] = [];
   products: Product[] = [];
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe({
@@ -39,6 +41,9 @@ export class ProductListComponent implements OnInit {
   }
 
   performFilter(filterBy: string): Product[] {
+    this.listFilter = this.route.snapshot.paramMap.get('filterby') || "";
+    this.showImage = this.route.snapshot.paramMap.get('showImage') === 'true';
+
     filterBy = filterBy.toLocaleLowerCase();
     return this.products.filter((product: Product) =>
       product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
