@@ -11,6 +11,7 @@ import {
 import { slideInAnimation } from './app.animation';
 
 import { AuthService } from './user/auth.service';
+import { MessageService } from './messages/message.service';
 
 @Component({
   selector: 'pm-root',
@@ -25,6 +26,9 @@ export class AppComponent {
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
+  get isMessageDisplayed(): boolean {
+    return this.messageService.isDisplayed;
+  }
 
   get userName(): string {
     if (this.authService.currentUser) {
@@ -33,7 +37,7 @@ export class AppComponent {
     return '';
   }
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {
     router.events.subscribe((routerEvent: Event) => {
       this.checkRouterEvent(routerEvent);
     });
@@ -48,6 +52,16 @@ export class AppComponent {
       routerEvent instanceof NavigationError){
         this.loading = false; 
       }
+  }
+
+  displayMessages(): void{
+    this.router.navigate([{ outlets: { popup: ['messages'] } }]); // Works
+    this.messageService.isDisplayed = true;
+  }
+
+  hideMessages(): void {
+    this.router.navigate([{ outlets: { popup: null } }]);
+    this.messageService.isDisplayed = false;
   }
 
   logOut(): void {
